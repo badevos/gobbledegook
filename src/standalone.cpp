@@ -241,6 +241,7 @@ int dataSetter(const char *pName, const void *pData)
 
 int main(int argc, char **ppArgv)
 {
+    bool modeSimulator = false;
 	// A basic command-line parser
 	for (int i = 1; i < argc; ++i)
 	{
@@ -257,11 +258,15 @@ int main(int argc, char **ppArgv)
 		{
 			logLevel = Debug;
 		}
+        else if  (arg == "-s")
+        {
+            modeSimulator = true;
+        }
 		else
 		{
 			LogFatal((std::string("Unknown parameter: '") + arg + "'").c_str());
 			LogFatal("");
-			LogFatal("Usage: standalone [-q | -v | -d]");
+			LogFatal("Usage: standalone [-q | -v | -d | -s]");
 			return -1;
 		}
 	}
@@ -289,10 +294,20 @@ int main(int argc, char **ppArgv)
 	//     This first parameter (the service name) must match tha name configured in the D-Bus permissions. See the Readme.md file
 	//     for more information.
 	//
-	if (!ggkStart("gobbledegook", "Gobbledegook", "Gobbledegook", dataGetter, dataSetter, kMaxAsyncInitTimeoutMS))
-	{
-		return -1;
-	}
+    if (modeSimulator)
+    {
+	    if (!ggkStart("andulink", "Andusim", "Andusim", dataGetter, dataSetter, kMaxAsyncInitTimeoutMS))
+	    {
+		    return -1;
+	    }
+    }
+    else
+    {
+	    if (!ggkStart("andulink", "Andulink", "Andulink", dataGetter, dataSetter, kMaxAsyncInitTimeoutMS))
+	    {
+		    return -1;
+	    }
+    }
 
 	// Wait for the server to start the shutdown process
 	//
@@ -302,7 +317,7 @@ int main(int argc, char **ppArgv)
 		std::this_thread::sleep_for(std::chrono::seconds(15));
 
 		serverDataBatteryLevel = std::max(serverDataBatteryLevel - 1, 0);
-		ggkNofifyUpdatedCharacteristic("/com/gobbledegook/battery/level");
+		ggkNofifyUpdatedCharacteristic("/com/andulink/battery/level");
 	}
 
 	// Wait for the server to come to a complete stop (CTRL-C from the command line)
