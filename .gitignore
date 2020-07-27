@@ -1,0 +1,10 @@
+Makefile
+config.*
+src/.deps/
+src/Makefile
+*.a
+*.o
+*.so
+src/standalone
+stamp-h1
+
