@@ -357,6 +357,7 @@ void HciAdapter::runEventThread()
 			// Unsupported
 			default:
 			{
+			/*
 				if (eventCode >= kMinEventType && eventCode <= kMaxEventType)
 				{
 					Logger::error("Unsupported response event type: " + Utils::hex(eventCode) + " (" + kEventTypeNames[eventCode] + ")");
@@ -365,6 +366,7 @@ void HciAdapter::runEventThread()
 				{
 					Logger::error("Invalid event type response: " + Utils::hex(eventCode));					
 				}
+			*/
 			}
 		}
 	}
